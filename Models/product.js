@@ -7,7 +7,7 @@ var schema = new mongoose.Schema(
             ref: 'Category'
         },
         name_product: String,
-        price_product: String,
+        price_product: Number,
         image: String,
         describe: String,
         gender: String,

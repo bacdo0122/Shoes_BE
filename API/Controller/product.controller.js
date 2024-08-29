@@ -13,8 +13,8 @@ module.exports.index = async (req, res) => {
 
 module.exports.gender = async (req, res) => {
 
-    const gender = req.query.gender
-
+    const gender = req.query.gender;
+    console.log("gender:", gender)
     const category = await Category.find({ gender: gender })
 
     res.json(category)
@@ -25,13 +25,26 @@ module.exports.gender = async (req, res) => {
 module.exports.category = async (req, res) => {
 
     const id_category = req.query.id_category
+    const id_sortBy = req.query.sortBy
 
     let products_category
-
+    console.log("req.query:", req.query)
     if (id_category === 'all'){
-        products_category = await Products.find()
+        if(id_sortBy === 'lowToHight'){
+            products_category = await Products.find().sort({price_product: 1})
+        } else if(id_sortBy === 'highToLow'){
+            products_category = await Products.find().sort({price_product: -1})
+        } else{
+            products_category = await Products.find()
+        }
     }else{
-        products_category = await Products.find({ id_category: id_category })
+        if(id_sortBy === 'lowToHight'){
+            products_category = await Products.find({ id_category: id_category }).sort({price_product: 1})
+        } else if(id_sortBy === 'highToLow'){
+            products_category = await Products.find({ id_category: id_category }).sort({price_product: -1})
+        } else{
+            products_category = await Products.find({ id_category: id_category })
+        }
     }
     
     res.json(products_category)
@@ -98,6 +111,8 @@ module.exports.pagination = async (req, res) => {
     //Lấy category từ query
     const category = req.query.category
 
+    const id_sortBy = req.query.sortBy
+
     //Lấy sản phẩm đầu và sẩn phẩm cuối
     var start = (page - 1) * numberProduct
     var end = page * numberProduct
@@ -106,25 +121,39 @@ module.exports.pagination = async (req, res) => {
 
     //Phân loại điều kiện category từ client gửi lên
     if (category === 'all'){
-        products = await Products.find()
+        if(id_sortBy === 'lowToHight'){
+            products = await Products.find().sort({price_product: 1})
+        } else if(id_sortBy === 'highToLow'){
+            products = await Products.find().sort({price_product: -1})
+        } else{
+            products = await Products.find()
+
+        }
     }else{
+        if(id_sortBy === 'lowToHight'){
+            products = await Products.find({ id_category: category }).sort({price_product: 1})
+        } else if(id_sortBy === 'highToLow'){
+            products = await Products.find({ id_category: category }).sort({price_product: -1})
+        } else{
         products = await Products.find({ id_category: category })
+        }
     }
 
+    const total = products.length;
     var paginationProducts = products.slice(start, end)
 
 
     if (!keyWordSearch){
         
-        res.json(paginationProducts)
+        res.json({data: paginationProducts, total})
 
     }else{
         var newData = paginationProducts.filter(value => {
-            return value.name_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
-            value.price_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
+            return value.name_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
         })
+        console.log("newData:", newData)
 
-        res.json(newData)
+        res.json({data: newData, total})
     }
 
 }
