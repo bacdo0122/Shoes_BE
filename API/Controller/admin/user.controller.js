@@ -48,12 +48,17 @@ module.exports.create = async (req, res) => {
         res.json({ msg: 'Email hoặc username đã tồn tại' })
     } else {
         var newUser = new User()
+        console.log("req.query:", req.query)
         const salt = await bcrypt.genSalt();
         req.query.password = await bcrypt.hash(req.query.password, salt);
         req.query.name = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
         newUser.fullname = req.query.name
         newUser.username = req.query.username
         newUser.password = req.query.password
+        newUser.phone = req.query.phone | '0326589616'
+        if(req.query.gender){
+            newUser.gender = req.query.gender
+        }
         if (req.query.permission) {
             newUser.id_permission = "66bbf2af196b7135d3146369"
         } else newUser.id_permission = req.query.permission
