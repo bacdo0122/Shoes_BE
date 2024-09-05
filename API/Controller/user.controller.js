@@ -28,7 +28,6 @@ module.exports.detail = async (req, res) => {
     const query = [{ username: username }, { email: username }]
 
     const user = await Users.findOne({ $or: query })
-    console.log("user:", user)
     if (user === null) {
         res.send("Khong Tìm Thấy User")
     } else {
@@ -49,6 +48,8 @@ module.exports.post_user = async (req, res) => {
     if (user) {
         res.send("User Da Ton Tai")
     } else {
+        const salt = await bcrypt.genSalt();
+        req.body.password = await bcrypt.hash(req.body.password, salt);
         await Users.create(req.body)
     }
 
@@ -63,6 +64,8 @@ module.exports.update_user = async (req, res) => {
     user.fullname = req.body.fullname
     user.username = req.body.username
     user.password = req.body.password
+    const salt = await bcrypt.genSalt();
+    user.password = await bcrypt.hash(req.body.password, salt);
 
     user.save()
 

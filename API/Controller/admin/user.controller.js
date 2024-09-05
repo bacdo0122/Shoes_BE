@@ -49,7 +49,6 @@ module.exports.create = async (req, res) => {
         res.json({ msg: 'Email hoặc username đã tồn tại' })
     } else {
         var newUser = new User()
-        console.log("req.query:", req.query)
         const salt = await bcrypt.genSalt();
         req.query.password = await bcrypt.hash(req.query.password, salt);
         req.query.name = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
