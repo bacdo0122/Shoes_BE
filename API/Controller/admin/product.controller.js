@@ -127,14 +127,26 @@ module.exports.update = async (req, res) => {
             fileImage.mv('./public/img/' + fileName)
         }
         else {
-            await Product.updateOne({ _id: req.body.id }, {
+            const updateData = {
                 name_product: req.body.name,
                 price_product: req.body.price,
-                id_category: req.body.category,
                 stock: req.body.stock,
-                describe: req.body.description,
-                gender: req.body.gender
-            }, function (err, res) {
+            };
+            
+            // Kiểm tra nếu req.body.category tồn tại và không phải là giá trị falsy
+            if (req.body.category) {
+                updateData.id_category = req.body.category;
+            }
+
+            if (req.body.description) {
+                updateData.describe = req.body.description;
+            }
+
+            if (req.body.gender) {
+                updateData.gender = req.body.gender;
+            }
+
+            await Product.updateOne({ _id: req.body.id }, updateData, function (err, res) {
                 if (err) return res.json({ msg: err });
             });
             res.json({ msg: "Bạn đã update thành công" })
