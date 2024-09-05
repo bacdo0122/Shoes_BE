@@ -46,7 +46,7 @@ module.exports.detailOrder = async (req, res) => {
     let end = page * perPage;
 
     const details = await Detail_History.find({ id_order: req.params.id }).populate('id_order').populate('id_product');
-
+    console.log("details:", details)
     const totalPage = Math.ceil(details.length / perPage);
 
     if (!keyWordSearch) {

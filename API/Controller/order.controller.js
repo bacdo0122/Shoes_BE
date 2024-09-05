@@ -10,7 +10,7 @@ const Note = require('../../Models/note')
 module.exports.post_order = async (req, res) => {
 
     const order = await Order.create(req.body)
-
+    console.log("order123:", order)
     res.json(order)
 
 }

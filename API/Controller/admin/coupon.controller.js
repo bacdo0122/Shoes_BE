@@ -93,7 +93,7 @@ module.exports.checking = async (req, res) => {
 
     const checkCoupon = await Order.findOne({ id_user: id_user, id_coupon: coupon._id })
 
-    if (checkCoupon){
+    if (checkCoupon.count === 0){
         res.json({ msg: "Bạn đã sử dụng mã này rồi"})
     }
 

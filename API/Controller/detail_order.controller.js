@@ -18,6 +18,6 @@ module.exports.post_detail_order = async (req, res) => {
 
     const detail_order = await Detail_Order.create(req.body)
 
-    res.send("Thanh Cong")
+    res.json(detail_order)
 
 }
