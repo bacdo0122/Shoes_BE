@@ -134,11 +134,16 @@ module.exports.completeOrder = async (req, res) => {
         })
 
     }else{
-
         const newOrder = orders.filter(value => {
-            return value.create_time.toString().indexOf(getDate.toString()) !== -1
-        })
+            const date = new Date(Number(value.create_time));
+            const inputDate = getDate.toString();
+            const [day, month, year] = inputDate.split('/');
 
+            // Tạo đối tượng Date với múi giờ UTC
+            const startDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0));
+            const endDate = new Date(Date.UTC(year, month - 1, day, 23, 59, 59));
+            return date >= startDate && date <= endDate;
+        })
         const totalPage = Math.ceil(newOrder.length / perPage);
 
         newOrder.map((value) => {

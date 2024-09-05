@@ -27,8 +27,9 @@ module.exports.index = async (req, res) => {
 
     } else {
         var newData = users.filter(value => {
-            return value.fullname.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
-                value.id.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
+            return value.fullname.trim().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||
+                value.id.trim().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1 ||  
+                value.email.trim().toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
         })
 
         res.json({

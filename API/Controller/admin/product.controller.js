@@ -49,7 +49,7 @@ module.exports.create = async (req, res) => {
         newProduct.name_product = req.body.name
         newProduct.price_product = req.body.price
         newProduct.id_category = req.body.category
-        // newProduct.number = req.body.number
+        newProduct.stock = req.body.stock
         newProduct.describe = req.body.description
         newProduct.gender = req.body.gender
 
@@ -115,7 +115,7 @@ module.exports.update = async (req, res) => {
                 name_product: req.body.name,
                 price_product: req.body.price,
                 id_category: req.body.category,
-                // number: req.body.number,
+                stock: req.body.stock,
                 describe: req.body.description,
                 gender: req.body.gender,
                 image: fileProduct
@@ -131,7 +131,7 @@ module.exports.update = async (req, res) => {
                 name_product: req.body.name,
                 price_product: req.body.price,
                 id_category: req.body.category,
-                // number: req.body.number,
+                stock: req.body.stock,
                 describe: req.body.description,
                 gender: req.body.gender
             }, function (err, res) {

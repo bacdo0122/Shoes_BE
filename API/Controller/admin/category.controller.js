@@ -46,6 +46,7 @@ module.exports.create = async (req, res) => {
         var newcategory = new Category()
         req.query.name = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
         newcategory.category = req.query.name
+        newcategory.gender = req.query.gender
 
         newcategory.save();
         res.json({ msg: "Bạn đã thêm thành công" })
@@ -115,7 +116,8 @@ module.exports.update = async (req, res) => {
         res.json({ msg: 'Loại đã tồn tại' })
     } else {
         req.query.name = req.query.name.toLowerCase().replace(/^.|\s\S/g, a => { return a.toUpperCase() })
-        await Category.updateOne({ _id: req.query.id }, { category: req.query.name }, function (err, res) {
+        
+        await Category.updateOne({ _id: req.query.id }, { category: req.query.name, gender: req.query.gender.toLowerCase() }, function (err, res) {
             if (err) return res.json({ msg: err });
         });
         res.json({ msg: "Bạn đã update thành công" })

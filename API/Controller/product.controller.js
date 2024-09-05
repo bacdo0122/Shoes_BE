@@ -5,7 +5,13 @@ const Category = require('../../Models/category')
 
 module.exports.index = async (req, res) => {
 
-    const products = await Products.find()
+    let search = req.query.search;
+    let products;
+    if(search){
+        products = await Products.find({name_product: search})
+    } else{
+        products = await Products.find()
+    }
 
     res.json(products)
 }
@@ -14,8 +20,7 @@ module.exports.index = async (req, res) => {
 module.exports.gender = async (req, res) => {
 
     const gender = req.query.gender;
-    console.log("gender:", gender)
-    const category = await Category.find({ gender: gender })
+    const category = await Products.find({ gender: gender })
 
     res.json(category)
 
@@ -28,7 +33,6 @@ module.exports.category = async (req, res) => {
     const id_sortBy = req.query.sortBy
 
     let products_category
-    console.log("req.query:", req.query)
     if (id_category === 'all'){
         if(id_sortBy === 'lowToHight'){
             products_category = await Products.find().sort({price_product: 1})
@@ -148,12 +152,11 @@ module.exports.pagination = async (req, res) => {
         res.json({data: paginationProducts, total})
 
     }else{
-        var newData = paginationProducts.filter(value => {
+        var newData = products.filter(value => {
             return value.name_product.toUpperCase().indexOf(keyWordSearch.toUpperCase()) !== -1
         })
-        console.log("newData:", newData)
-
-        res.json({data: newData, total})
+        var newProducts = newData.slice(start, end)
+        res.json({data: newProducts, total: newProducts.length})
     }
 
 }
